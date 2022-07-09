@@ -13,11 +13,19 @@ function App() {
     console.log(event.target.value);
   };
 
+  const handleFormSubmit = (event) => {
+    console.log("Form submit");
+    event.preventDefault();
+  };
+
   return (
     <div className="App">
-      <form>
+      <form onSubmit={handleFormSubmit}>
         <input onBlur={handleEmailFeild} type="email" name="" id="" />
+        <br />
         <input onBlur={handlePassFeild} type="password" name="" id="" />
+        <br />
+        <input type="submit" value="Log In" />
       </form>
     </div>
   );
