@@ -6,6 +6,7 @@ import {
   getAuth,
   sendEmailVerification,
   sendPasswordResetEmail,
+  updateProfile,
 } from "firebase/auth";
 import app from "./firebase.init";
 import Form from "react-bootstrap/Form";
@@ -15,10 +16,15 @@ import { useState } from "react";
 const auth = getAuth(app);
 
 function App() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [error, setError] = useState("");
   const [registered, setRegistered] = useState(false);
+
+  const handleNameFeild = (event) => {
+    setName(event.target.value);
+  };
 
   const handleEmailFeild = (event) => {
     setEmail(event.target.value);
@@ -55,6 +61,7 @@ function App() {
           setEmail("");
           setPass("");
           verified();
+          forName();
         })
         .catch((error) => {
           console.error(error);
@@ -62,6 +69,12 @@ function App() {
         });
     }
     event.preventDefault();
+  };
+
+  const forName = () => {
+    updateProfile(auth.currentUser, {
+      displayName: name,
+    });
   };
 
   const verified = () => {
@@ -77,6 +90,17 @@ function App() {
           Please {registered ? "Log In" : "Register!"}
         </h1>
         <Form onSubmit={handleFormSubmit}>
+          {!registered && (
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>Your Name</Form.Label>
+              <Form.Control
+                onBlur={handleNameFeild}
+                type="text"
+                placeholder="Enter Your Name"
+                required
+              />
+            </Form.Group>
+          )}
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
             <Form.Control
